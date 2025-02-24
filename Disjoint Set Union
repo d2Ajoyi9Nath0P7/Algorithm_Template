@@ -1,0 +1,99 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define endl '\n'
+typedef unsigned long long int llu;
+const int inf = 2000000000;
+const ll infLL = 9000000000000000000;
+
+typedef vector<int> vi;
+typedef pair<ll, ll> pll;
+typedef vector<pll> vll;
+typedef pair<int, int> pii;
+typedef vector<pii> vii;
+
+const int mx = 1e5 + 100;
+
+class DisjointSet{
+    vector<int>rank,parent;
+public:
+    DisjointSet(int n)
+    {
+        rank.resize(n+1,0);
+        parent.resize(n+1,0);
+        for(int i = 0 ;  i <= n ; i++)
+        {
+            parent[i] = i;
+        }
+    }
+    int ultimateParent(int node)//path compression
+    {
+        if(node == parent[node])
+        {
+            return node;
+        }
+        return parent[node] = ultimateParent(parent[node]);
+    }
+    void unionByRank(int u,int v)
+    {
+        int ulp_u = ultimateParent(u);
+        int ulp_v = ultimateParent(v);
+
+        if(ulp_u == ulp_v)
+        {
+            return;
+        }
+        if(rank[ulp_u] < rank[ulp_v])
+        {
+            parent[ulp_u] = ulp_v;
+        }
+        else if(rank[ulp_u] > rank[ulp_v])
+        {
+            parent[ulp_v] = ulp_u;
+        }
+        else
+        {
+            parent[ulp_v] = ulp_u;
+            rank[ulp_u]++;
+        }
+    }
+};
+
+
+void solve()
+{
+    DisjointSet ds(7);
+
+    ds.unionByRank(1,2);
+    ds.unionByRank(2,3);
+    ds.unionByRank(4,5);
+    ds.unionByRank(6,7);
+    ds.unionByRank(5,6);
+
+    if(ds.ultimateParent(3) == ds.ultimateParent(7))
+    {
+        cout<<"Same\n";
+    }
+    else
+    {
+        cout<<"Not Same\n";
+    }
+
+
+    ds.unionByRank(3,7);
+    if(ds.ultimateParent(3) == ds.ultimateParent(7))
+    {
+        cout<<"Same\n";
+    }
+    else
+    {
+        cout<<"Not Same\n";
+    }
+}
+
+int main()
+{
+    solve();
+    return 0;
+}
+
