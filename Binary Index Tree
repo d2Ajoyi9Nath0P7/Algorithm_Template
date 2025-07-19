@@ -1,0 +1,66 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define pb push_back
+#define ff first
+#define ss second
+#define repl(i,n) for(int i = 0; i <= n ; i++)
+
+#define mx 100000
+vector<int> tree(mx,0);
+vector<int>vec(mx,0);
+
+void fastIO()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+}
+
+int preSum(int index,vector<int>&tree)
+{
+    int sum = 0;
+    while(index > 0)
+    {
+        sum += tree[index];//sum += tree[6]//3     sum += tree[4]//
+        index -= (index & -index);
+    }
+    return sum;
+}
+
+void update(int index,int val,int n,vector<int>&tree)//log(n)
+{
+    while(index <= n)
+    {
+        tree[index] += val;//tree[10] += val; tree[8]
+        index += (index & -index);//5 += (5 & (-5))
+    }
+}
+
+void solve()
+{
+    int n;
+    cin>>n;
+    for(int i = 1 ; i <= n ; i++)
+    {
+        cin>>vec[i];
+        update(i,vec[i],n,tree);
+    }
+    for(int i = 1 ; i <= n ; i++)
+    {
+        cout<<tree[i]<<" ";
+    }
+    cout<<"\n";
+    cout<<preSum(6,tree)<<"\n";
+    for(int i = 1 ; i <= n ; i++)
+    {
+        cout<<tree[i]<<" ";
+    }
+
+    cout<<"\n";
+}
+
+int main()
+{
+    fastIO();
+    solve();
+}
